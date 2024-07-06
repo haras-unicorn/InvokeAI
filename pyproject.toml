@@ -1,170 +1,214 @@
+###############################################################################
+# poetry
+###############################################################################
+
 [build-system]
-requires = ["setuptools~=65.5", "pip~=22.3", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
-[project]
+[tool.poetry]
 name = "InvokeAI"
+version = "4.2.5"
 description = "An implementation of Stable Diffusion which provides various new features and options to aid the image generation process"
-requires-python = ">=3.10, <3.12"
-readme = { content-type = "text/markdown", file = "README.md" }
+authors = ["The InvokeAI Project <lincoln.stein@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://invoke-ai.github.io/InvokeAI/"
+repository = "https://github.com/invoke-ai/InvokeAI/"
+documentation = "https://invoke-ai.github.io/InvokeAI/"
 keywords = ["stable-diffusion", "AI"]
-dynamic = ["version"]
-license = { file = "LICENSE" }
-authors = [{ name = "The InvokeAI Project", email = "lincoln.stein@gmail.com" }]
 classifiers = [
-  'Development Status :: 4 - Beta',
-  'Environment :: GPU',
-  'Environment :: GPU :: NVIDIA CUDA',
-  'Environment :: MacOS X',
-  'Intended Audience :: End Users/Desktop',
-  'Intended Audience :: Developers',
-  'License :: OSI Approved :: MIT License',
-  'Operating System :: POSIX :: Linux',
-  'Operating System :: MacOS',
-  'Operating System :: Microsoft :: Windows',
-  'Programming Language :: Python :: 3 :: Only',
-  'Programming Language :: Python :: 3.10',
-  'Topic :: Artistic Software',
-  'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
-  'Topic :: Internet :: WWW/HTTP :: WSGI :: Server',
-  'Topic :: Multimedia :: Graphics',
-  'Topic :: Scientific/Engineering :: Artificial Intelligence',
-  'Topic :: Scientific/Engineering :: Image Processing',
+  "Development Status :: 4 - Beta",
+  "Environment :: GPU",
+  "Environment :: GPU :: NVIDIA CUDA",
+  "Environment :: MacOS X",
+  "Intended Audience :: End Users/Desktop",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Topic :: Artistic Software",
+  "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+  "Topic :: Internet :: WWW/HTTP :: WSGI :: Server",
+  "Topic :: Multimedia :: Graphics",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Image Processing",
 ]
-dependencies = [
-  # Core generation dependencies, pinned for reproducible builds.
-  "accelerate==0.30.1",
-  "clip_anytorch==2.6.0",       # replacing "clip @ https://github.com/openai/CLIP/archive/eaa22acb90a5876642d0507623e859909230a52d.zip",
-  "compel==2.0.2",
-  "controlnet-aux==0.0.7",
-  "diffusers[torch]==0.27.2",
-  "invisible-watermark==0.2.0", # needed to install SDXL base and refiner using their repo_ids
-  "mediapipe==0.10.7",          # needed for "mediapipeface" controlnet model
-  "numpy==1.26.4",              # >1.24.0 is needed to use the 'strict' argument to np.testing.assert_array_equal()
-  "onnx==1.15.0",
-  "onnxruntime==1.16.3",
-  "opencv-python==4.9.0.80",
-  "pytorch-lightning==2.1.3",
-  "safetensors==0.4.3",
-  "timm==0.6.13",               # needed to override timm latest in controlnet_aux, see  https://github.com/isl-org/ZoeDepth/issues/26
-  "torch==2.2.2",
-  "torchmetrics==0.11.4",
-  "torchsde==0.2.6",
-  "torchvision==0.17.2",
-  "transformers==4.41.1",
-
-  # Core application dependencies, pinned for reproducible builds.
-  "fastapi-events==0.11.0",
-  "fastapi==0.111.0",
-  "huggingface-hub==0.23.1",
-  "pydantic-settings==2.2.1",
-  "pydantic==2.7.2",
-  "python-socketio==5.11.1",
-  "uvicorn[standard]==0.28.0",
-
-  # Auxiliary dependencies, pinned only if necessary.
-  "albumentations",
-  "blake3",
-  "click",
-  "datasets",
-  "Deprecated",
-  "dnspython~=2.4.0",
-  "dynamicprompts",
-  "easing-functions",
-  "einops",
-  "facexlib",
-  "matplotlib",       # needed for plotting of Penner easing functions
-  "npyscreen",
-  "omegaconf",
-  "picklescan",
-  "pillow",
-  "prompt-toolkit",
-  "pympler~=1.0.1",
-  "pypatchmatch",
-  'pyperclip',
-  "pyreadline3",
-  "python-multipart",
-  "requests~=2.28.2",
-  "rich~=13.3",
-  "scikit-image~=0.21.0",
-  "semver~=3.0.1",
-  "send2trash",
-  "test-tube~=0.7.5",
-  "windows-curses; sys_platform=='win32'",
+include = [
+  "invokeai/app/assets/*.png",
+  "invokeai/app/services/workflow_records/default_workflows/*.json",
+  "invokeai/assets/fonts/**/*.ttf",
+  "invokeai/backend/**/*.png",
+  "invokeai/configs/*.example",
+  "invokeai/configs/**/*.yaml",
+  "invokeai/configs/*.txt",
+  "invokeai/frontend/web/dist/**",
+  "invokeai/frontend/web/static/**",
+  "invokeai/app/invocations/**",
 ]
 
-[project.optional-dependencies]
-"xformers" = [
-  # Core generation dependencies, pinned for reproducible builds.
-  "xformers==0.0.25post1; sys_platform!='darwin'",
-  # Auxiliary dependencies, pinned only if necessary.
-  "triton; sys_platform=='linux'",
-]
-"onnx" = ["onnxruntime"]
-"onnx-cuda" = ["onnxruntime-gpu"]
-"onnx-directml" = ["onnxruntime-directml"]
-"dist" = ["pip-tools", "pipdeptree", "twine"]
-"docs" = [
-  "mkdocs-material>=9.5.13",
+[tool.poetry.dependencies]
+python = ">=3.10,<3.12"
+accelerate = "0.30.1"
+clip_anytorch = "2.6.0"
+compel = "2.0.2"
+controlnet-aux = "0.0.7"
+diffusers = { version = "0.27.2", extras = ["torch"] }
+invisible-watermark = "0.2.0"
+mediapipe = "0.10.7"
+numpy = "1.26.4"
+onnx = "1.15.0"
+onnxruntime = "1.16.3"
+opencv-python = "4.9.0.80"
+pytorch-lightning = "2.1.3"
+safetensors = "0.4.3"
+timm = "0.6.13"
+torchmetrics = "0.11.4"
+torchsde = "0.2.6"
+transformers = "4.41.1"
+fastapi-events = "0.11.0"
+fastapi = "0.111.0"
+huggingface-hub = "0.23.1"
+pydantic-settings = "2.2.1"
+pydantic = "2.7.2"
+python-socketio = "5.11.1"
+uvicorn = { version = "0.28.0", extras = ["standard"] }
+albumentations = "*"
+blake3 = "*"
+click = "*"
+datasets = "*"
+Deprecated = "*"
+dnspython = "~2.4.0"
+dynamicprompts = "*"
+easing-functions = "*"
+einops = "*"
+facexlib = "*"
+matplotlib = "*"
+npyscreen = "*"
+omegaconf = "*"
+picklescan = "*"
+pillow = "*"
+prompt-toolkit = "*"
+pympler = "~1.0.1"
+pypatchmatch = "*"
+pyperclip = "*"
+pyreadline3 = "*"
+python-multipart = "*"
+requests = "~2.28.2"
+rich = "~13.3"
+scikit-image = "~0.21.0"
+semver = "~3.0.1"
+send2trash = "*"
+test-tube = "~0.7.5"
+windows-curses = { version = "*", markers = "sys_platform == 'win32'" }
+
+# FIXME: chromadb 0.5.0 wheel is broken in nix
+chromadb = "0.5.3"
+
+# Extras
+
+# TODO: add different torch versions as extras
+# NOTE: https://github.com/python-poetry/poetry/issues/6409#issuecomment-2110868287
+torch = { version = "2.2.2", source = "torch-cuda" }
+torchvision = { version = "0.17.2", source = "torch-cuda" }
+xformers = { version = "0.0.25post1", optional = true, markers = "sys_platform != 'darwin'" }
+triton = { version = "*", optional = true, markers = "sys_platform == 'linux'" }
+onnxruntime-gpu = { version = "*", optional = true }
+onnxruntime-directml = { version = "*", optional = true }
+
+# FIXME: mkdocstrings makes nix run into infinite recursion
+# NOTE: should be in dev dependencies
+mkdocs-material = { version = ">=9.5.13", optional = true}
+mkdocs-git-revision-date-localized-plugin = { version = "*", optional = true }
+mkdocs-redirects = { version = "*", optional = true }
+mkdocstrings = { version = ">=0.24.1", extras = ["python"], optional = true }
+
+[tool.poetry.group.dev.dependencies]
+pip-tools = "*"
+pipdeptree = "*"
+twine = "*"
+jurigged = "*"
+pudb = "*"
+snakeviz = "*"
+gprof2dot = "*"
+ruff = ">=0.3.3"
+ruff-lsp = ">=0.0.53"
+mypy = "*"
+pre-commit = "*"
+pytest = ">6.0.0"
+pytest-cov = "*"
+pytest-timeout = "*"
+pytest-datadir = "*"
+requests_testadapter = "*"
+httpx = "*"
+pyright = "^1.1.370"
+ 
+[tool.poetry.extras]
+xformers = ["xformers", "triton"]
+onnx = ["onnxruntime"]
+onnx-cuda = ["onnxruntime-gpu"]
+onnx-directml = ["onnxruntime-directml"]
+test = [
+  "mkdocs-material",
   "mkdocs-git-revision-date-localized-plugin",
   "mkdocs-redirects",
-  "mkdocstrings[python]>=0.24.1",
-]
-"dev" = ["jurigged", "pudb", "snakeviz", "gprof2dot"]
-"test" = [
-  "ruff>=0.3.3",
-  "ruff-lsp>=0.0.53",
-  "mypy",
-  "pre-commit",
-  "pytest>6.0.0",
-  "pytest-cov",
-  "pytest-timeout",
-  "pytest-datadir",
-  "requests_testadapter",
-  "httpx",
+  "mkdocstrings" 
 ]
 
-[project.scripts]
-"invokeai-web" = "invokeai.app.run_app:run_app"
-"invokeai-import-images" = "invokeai.frontend.install.import_images:main"
-"invokeai-db-maintenance" = "invokeai.backend.util.db_maintenance:main"
+[[tool.poetry.source]]
+name = "torch-cuda"
+url = "https://download.pytorch.org/whl/cu121"
+priority = "explicit"
 
-[project.urls]
-"Homepage" = "https://invoke-ai.github.io/InvokeAI/"
-"Documentation" = "https://invoke-ai.github.io/InvokeAI/"
-"Source" = "https://github.com/invoke-ai/InvokeAI/"
-"Bug Reports" = "https://github.com/invoke-ai/InvokeAI/issues"
-"Discord" = "https://discord.gg/ZmtBAhwWhy"
+[[tool.poetry.source]]
+name = "torch-rocm"
+url = "https://download.pytorch.org/whl/rocm6.0"
+priority = "explicit"
 
-[tool.setuptools.dynamic]
-version = { attr = "invokeai.version.__version__" }
+[[tool.poetry.source]]
+name = "torch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
 
-[tool.setuptools.packages.find]
-"where" = ["."]
-"include" = [
-  "invokeai.assets.fonts*",
-  "invokeai.version*",
-  "invokeai.generator*",
-  "invokeai.backend*",
-  "invokeai.frontend*",
-  "invokeai.frontend.web.dist*",
-  "invokeai.frontend.web.static*",
-  "invokeai.configs*",
-  "invokeai.app*",
-  "invokeai.invocation_api*",
-]
+[tool.poetry.scripts]
+invokeai-web = "invokeai.app.run_app:run_app"
+invokeai-import-images = "invokeai.frontend.install.import_images:main"
+invokeai-db-maintenance = "invokeai.backend.util.db_maintenance:main"
 
-[tool.setuptools.package-data]
-"invokeai.app.assets" = ["**/*.png"]
-"invokeai.app.services.workflow_records.default_workflows" = ["*.json"]
-"invokeai.assets.fonts" = ["**/*.ttf"]
-"invokeai.backend" = ["**.png"]
-"invokeai.configs" = ["*.example", "**/*.yaml", "*.txt"]
-"invokeai.frontend.web.dist" = ["**"]
-"invokeai.frontend.web.static" = ["**"]
-"invokeai.app.invocations" = ["**"]
+[tool.poetry.urls]
+homepage = "https://invoke-ai.github.io/InvokeAI/"
+documentation = "https://invoke-ai.github.io/InvokeAI/"
+repository = "https://github.com/invoke-ai/InvokeAI/"
+bug-reports = "https://github.com/invoke-ai/InvokeAI/issues"
+discord = "https://discord.gg/ZmtBAhwWhy"
 
-#=== Begin: PyTest and Coverage
+# TODO: poetry doesn't cupport dynamic versioning
+# [tool.setuptools.dynamic]
+# version = { attr = "invokeai.version.__version__" }
+
+# TODO: poetry infers packages based on folder structure
+# [tool.setuptools.packages.find]
+# "where" = ["."]
+# "include" = [
+#   "invokeai.assets.fonts*",
+#   "invokeai.version*",
+#   "invokeai.generator*",
+#   "invokeai.backend*",
+#   "invokeai.frontend*",
+#   "invokeai.frontend.web.dist*",
+#   "invokeai.frontend.web.static*",
+#   "invokeai.configs*",
+#   "invokeai.app*",
+#   "invokeai.invocation_api*",
+# ]
+
+###############################################################################
+# pytest
+###############################################################################
+
 [tool.pytest.ini_options]
 addopts = "--cov-report term --cov-report html --cov-report xml --strict-markers -m \"not slow\""
 markers = [
@@ -177,7 +221,7 @@ source = ["invokeai"]
 omit = ["*tests*", "*migrations*", ".venv/*", "*.env"]
 [tool.coverage.report]
 show_missing = true
-fail_under = 85     # let's set something sensible on Day 1 ...
+fail_under = 85
 [tool.coverage.json]
 output = "coverage/coverage.json"
 pretty_print = true
@@ -185,9 +229,11 @@ pretty_print = true
 directory = "coverage/html"
 [tool.coverage.xml]
 output = "coverage/index.xml"
-#=== End: PyTest and Coverage
 
-#=== Begin: Ruff
+###############################################################################
+# ruff
+###############################################################################
+
 [tool.ruff]
 line-length = 120
 exclude = [
@@ -209,21 +255,18 @@ ignore = [
 select = ["B", "C", "E", "F", "W", "I", "TID"]
 
 [tool.ruff.lint.flake8-tidy-imports]
-# Disallow all relative imports.
 ban-relative-imports = "all"
 
-#=== End: Ruff
+###############################################################################
+# mypy
+###############################################################################
 
-#=== Begin: MyPy
-
-# global mypy config
 [tool.mypy]
 ignore_missing_imports = true # ignores missing types in third-party libraries
 strict = true
 plugins = "pydantic.mypy"
 exclude = ["tests/*"]
 
-# overrides for specific modules
 [[tool.mypy.overrides]]
 follow_imports = "skip" # skips type checking of the modules listed below
 module = [
@@ -250,7 +293,7 @@ module = [
   "invokeai.backend.model_management.model_merge",
   "invokeai.backend.model_management.model_probe",
   "invokeai.backend.model_management.model_search",
-  "invokeai.backend.model_management.models.*",                            # this is needed to ignore the module's `__init__.py`
+  "invokeai.backend.model_management.models.*", # this is needed to ignore the module's `__init__.py`
   "invokeai.backend.model_management.models.base",
   "invokeai.backend.model_management.models.controlnet",
   "invokeai.backend.model_management.models.ip_adapter",
@@ -267,14 +310,14 @@ module = [
   "invokeai.backend.util.util",
   "invokeai.frontend.install.model_install",
 ]
-#=== End: MyPy
+
+###############################################################################
+# pyright
+###############################################################################
 
 [tool.pyright]
-# Start from strict mode
 typeCheckingMode = "strict"
-# This errors whenever an import is missing a type stub file - way too noisy
 reportMissingTypeStubs = "none"
-# These are the rest of the rules enabled by strict mode - enable them @ warning
 reportConstantRedefinition = "warning"
 reportDeprecated = "warning"
 reportDuplicateImport = "warning"
